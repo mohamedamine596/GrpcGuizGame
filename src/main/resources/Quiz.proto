@@ -1,0 +1,64 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package cobra.quiz;
+
+// Message definitions
+message Quiz {
+  int32 id = 1;
+  string question = 2;
+  string answer_1 = 3;
+  string answer_2 = 4;
+  string answer_3 = 5;
+  string answer_4 = 6;
+  int32 correct_answer = 7; // Index of the correct answer
+}
+
+message Player {
+  string playerName = 1;
+  int32 score = 2;
+}
+
+message RegisterPlayerRequest {
+  string playerName = 1;
+}
+
+message RegisterPlayerResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetQuizResponse {
+  repeated Quiz quizzes = 1;
+}
+
+message GetQuestionRequest {
+  int32 quiz_id = 1;
+}
+
+message GetQuestionResponse {
+  Quiz quiz = 1;
+}
+
+message PlayRequest {
+  string playerName = 1;
+  int32 quiz_id = 2;
+  int32 answer = 3;
+}
+
+message PlayResponse {
+  bool correct = 1;
+  int32 updated_score = 2;
+}
+
+message GetPlayerScoresResponse {
+  repeated Player players = 1;
+}
+
+// Service definition
+service QuizGame {
+  rpc RegisterPlayer(RegisterPlayerRequest) returns (RegisterPlayerResponse);
+  rpc GetQuiz(google.protobuf.Empty) returns (GetQuizResponse);
+  rpc GetQuestion(GetQuestionRequest) returns (GetQuestionResponse);
+  rpc Play(PlayRequest) returns (PlayResponse);
+  rpc GetPlayerScores(google.protobuf.Empty) returns (GetPlayerScoresResponse);
+}
